@@ -22,7 +22,7 @@ defmodule NoSlides.Mixfile do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:riak_core, path: "/Users/erik/Projects/riak_core"},
+      {:riak_core, github: "enilsen16/riak_core", branch: "partisan-support"},
       {:riak_ensemble, github: "lasp-lang/riak_ensemble", branch: "develop", override: true},
       {:eleveldb, "~>2.2.20", override: true},
       {:lager, "~>3.2", override: true},

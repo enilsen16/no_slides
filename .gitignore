@@ -57,5 +57,8 @@ apps/riak/.rebar
 
 erln8.config
 
+data/
+log/
+ring_data_dir/
 
 # End of https://www.gitignore.io/api/macos,erlang,elixir

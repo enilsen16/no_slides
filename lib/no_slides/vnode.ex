@@ -1,6 +1,9 @@
 defmodule NoSlides.VNode do
   @behaviour :riak_core_vnode
   require Logger
+  require Record
+
+  Record.defrecord :fold_req_v2, :riak_core_fold_req_v2, Record.extract(:riak_core_fold_req_v2, from_lib: "riak_core/include/riak_core_vnode.hrl")
 
   def start_vnode(partition) do
     :riak_core_vnode_master.get_vnode_pid(partition, __MODULE__)
@@ -35,8 +38,18 @@ end
     {:ok, state}
   end
 
-  def handle_handoff_command(_fold_req, _sender, state) do
-    {:noreply, state}
+  def handle_handoff_command(fold_req_v2() = fold_req, _sender, state) do
+    Logger.debug ">>>>> Handoff V2 <<<<<<"
+    foldfun = fold_req_v2(fold_req, :foldfun)
+    acc0 = fold_req_v2(fold_req, :acc0)
+    acc_final = state.data |> Enum.reduce(acc0, fn {k, v}, acc ->
+      foldfun.(k, v, acc)
+    end)
+    {:reply, acc_final, state}
+  end
+  def handle_handoff_command(request, sender, state) do
+    Logger.debug ">>> Handoff generic request <<<"
+    handle_command(request, sender, state)
   end
 
   def is_empty(state) do
@@ -48,14 +61,16 @@ end
   end
 
   def delete(state) do
-    {:ok, state}
+    {:ok, Map.put(state, :data, %{})}
   end
 
-  def handle_handoff_data(_bin_data, state) do
+  def handle_handoff_data(bin_data, state) do
+    {k, v} = :erlang.binary_to_term(bin_data)
     {:reply, :ok, state}
   end
 
-  def encode_handoff_item(_k, _v) do
+  def encode_handoff_item(k, v) do
+    :erlang.term_to_binary({k,v})
   end
 
   def handle_coverage(_req, _key_spaces, _sender, state) do

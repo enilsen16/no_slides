@@ -1,21 +1,5 @@
 # NoSlides
 
-**TODO: Add description**
+Clone of [gpad/noslides](https://github.com/gpad/no_slides) but using OTP 20 and Elixir 1.6
 
-## Installation
-
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `no_slides` to your list of dependencies in `mix.exs`:
-
-```elixir
-def deps do
-  [
-    {:no_slides, "~> 0.1.0"}
-  ]
-end
-```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/no_slides](https://hexdocs.pm/no_slides).
-
+Just experimenting with riak_core :D
